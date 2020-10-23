@@ -4,40 +4,25 @@
 #include "conio.h"
 #pragma warning (disable : 4996)
 
-
-int* num;
-int** arr;
-
-void DFS(int v) {
-
-	int t;
+void DFS(int v, int* mass, int size, int** arr) {
 
 	printf("Посещенная вершина - %d\n", v + 1);
-	num[v] = 1;
-
-
-	for (t = 0; t <= 6; t++) {
-		if (arr[v][t] == 1 && num[t] == 0) {
-
-			DFS(t);
+	mass[v] = 1;
+	for (int i = 0; i <= size; i++) {
+		if ((arr[v][i] == 1) && (mass[i] == 0)) {
+			DFS(i, mass, size, arr);
 		}
-
 	}
-
-
 }
-
-
 void main()
-
 {
-
 	int begin;
 	int n;
+	int** arr1;
+	int* num;
 	SetConsoleCP(1251);
 	SetConsoleOutputCP(1251);
 	srand(time(NULL));
-
 	printf("Введите порядок массива - ");
 	scanf("%d", &n);
 
@@ -45,42 +30,31 @@ void main()
 	for (int i = 0; i < n; i++) {
 		num[i] = 0;
 	}
-	arr = (int**)malloc(n * sizeof(int*));
-	for (int i = 0; i < n; i++) arr[i] = (int*)malloc(n * sizeof(int));
+	arr1 = (int**)malloc(n * sizeof(int*));
+	for (int i = 0; i < n; i++) arr1[i] = (int*)malloc(n * sizeof(int));
 
 	for (int i = 0; i < n; i++) {
 		for (int j = 0; j < n; j++) {
 			if (j > i) {
-				arr[i][j] = rand() % 2;
-				arr[j][i] = arr[i][j];
+				arr1[i][j] = rand() % 2;
+				arr1[j][i] = arr1[i][j];
 			}
-			else if (i == j) arr[i][j] = 0;
+			else if (i == j) arr1[i][j] = 0;
 		}
 	}
-
 	printf(" ");
-
 	for (int k = 1; k <= n; k++) printf(" %d", k);
-
 	printf("\n   -----------\n");
-
 	for (int i = 0; i < n; i++) {
-
 		printf("%d |", i + 1);
-
 		for (int j = 0; j < n; j++) {
-
-			printf("%d ", arr[i][j]);
-
+			printf("%d ", arr1[i][j]);
 		}
-
 		printf("\n");
-
 	}
-
-	
-	printf("Введите вершину с которой хотите начать обход ");
+	printf("Введите вершину с которой хотите начать обход: ");
 	scanf("%d", &begin);
-	DFS(begin - 1);
+	DFS(begin - 1, num, n, arr1);
+	free(arr1);
 	system("pause");
 }
